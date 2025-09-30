@@ -1,0 +1,176 @@
+/* CSS sama persis dengan milikmu sebelumnya, tidak diubah */
+#logo {width: 250px; margin-bottom: 20px; margin-left: 50px; margin-right: 50px; margin-top: 10px;}
+#icon {width: 70px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px; margin-top: 10px;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ffa400 0%, #972d07 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ffa400 0%, #972d07 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .form-container { padding: 30px; }
+        .input-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #582707;
+            margin-bottom: 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: #ffffff;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ffa400;
+            box-shadow: 0 0 0 3px rgba(255, 164, 0, 0.1);
+        }
+        input.error, select.error { border-color: #ef4444; }
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ffa400 0%, #972d07 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 164, 0, 0.3);
+        }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: #582707; }
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(88, 39, 7, 0.3);
+        }
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .switch-form a {
+            color: #ffa400;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .switch-form a:hover { text-decoration: underline; }
+        .success-message {
+            background: #972D07;
+            color: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .data-display {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffa400;
+        }
+        .data-display h3 {
+            color: #582707;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .data-label { font-weight: 500; color: #6b7280; }
+        .data-value { font-weight: 600; color: #582707; }
+        .student-list { max-height: 400px; overflow-y: auto; }
+        .student-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .student-card h4 { color: #582707; margin-bottom: 10px; }
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 14px;
+        }
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .role-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #582707;
+        }
+        .role-btn.active {
+            border-color: #ffa400;
+            background: #ffa400;
+            color: #ffffff;
+        }
+        .role-btn:hover { border-color: #ffa400; }
+        .guru-info {
+            background: #fffaf0;
+            border: 1px solid #ffa400;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            .container { margin: 10px; max-width: none; }
+            .form-container { padding: 20px; }
+            .header { padding: 20px; }
+            .role-selector { flex-direction: column; }
+        }

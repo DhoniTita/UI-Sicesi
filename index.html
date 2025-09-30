@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Si Cesi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type ="image/png" href="./Final_Logo_Sicesi[1].png">
+</head>
+    <link rel="icon" type ="image/png" href="./Final_Logo_Sicesi[1].png">
+<head>
+<body>
+    <div class="container">
+        <div class="header">
+              <h2>Foto Profil</h2>
+      <img id="icon" src="kdw.png" alt="kdw PNG" />
+      <img id="logo" src="Final_Logo_Sicesi[1].png" alt="Final Logo Si cesi PNG" />
+        </div>
+        <div class="form-container">
+            <!-- Role Selector -->
+            <div class="role-selector">
+                <button class="role-btn active" onclick="selectRole('siswa')">Login Siswa</button>
+                <button class="role-btn" onclick="selectRole('guru')">Login Guru</button>
+            </div>
+            <!-- Siswa Login Form -->
+            <div id="siswaLoginForm">
+                <div class="input-group">
+                    <label for="nisLogin">Nomor NIS</label>
+                    <input type="text" id="nisLogin" placeholder="Masukkan NIS" maxlength="9">
+                    <div class="error-message" id="nisLoginError">NIS harus diisi dan berupa tepat 9 angka</div>
+                </div>
+                <div class="input-group">
+                    <label for="nisnLogin">Nomor NISN</label>
+                    <input type="text" id="nisnLogin" placeholder="Masukkan NISN" maxlength="10">
+                    <div class="error-message" id="nisnLoginError">NISN harus diisi dan berupa tepat 10 angka</div>
+                </div>
+                <button class="btn" onclick="handleSiswaLogin()">Login</button>
+            </div>
+            <!-- Guru Login Form -->
+            <div id="guruLoginForm" style="display: none;">
+                <div class="input-group">
+                    <label for="nikGuru">NIK Guru</label>
+                    <input type="text" id="nikGuru" placeholder="Masukkan NIK guru" maxlength="13">
+                    <div class="error-message" id="nikGuruError">NIK harus diisi dan berupa tepat 13 angka(harus angka)</div>
+                </div>
+                <div class="input-group">
+                    <label for="kelasGuru">Nama Kelas</label>
+                    <select id="kelasGuru">
+                        <option value="">Pilih Kelas</option>
+                        <option value="10 DKV 1">10 DKV 1</option>
+                        <option value="10 DKV 2">10 DKV 2</option>
+                        <option value="10 DKV 3">10 DKV 3</option>
+                        <option value="10 BR 1">10 BR 1</option>
+                        <option value="10 BR 2">10 BR 2</option>
+                        <option value="10 BR 3">10 BR 3</option>
+                        <option value="10 LP 1">10 LP 1</option>
+                        <option value="10 LP 2">10 LP 2</option>
+                        <option value="10 LP 3">10 LP 3</option>
+                        <option value="10 AKL 1">10 AKL 1</option>
+                        <option value="10 AKL 2">10 AKL 2</option>
+                        <option value="10 AKL 3">10 AKL 3</option>
+                        <option value="10 MPLB 1">10 MPLB 1</option>
+                        <option value="10 MPLB 2">10 MPLB 2</option>
+                        <option value="10 MPLB 3">10 MPLB 3</option>
+                        <option value="10 ULW 1">10 ULW 1</option>
+                        <option value="10 ULW 2">10 ULW 2</option>
+                        <option value="10 ULW 3">10 ULW 3</option>
+                    </select>
+                    <div class="error-message" id="kelasGuruError">Kelas harus dipilih</div>
+                </div>
+                <button class="btn" onclick="handleGuruLogin()">Login</button>
+                <div class="switch-form">
+                    <p>Contoh: NIK 1234567890000 untuk kelas 10 dkv 1/2/3</p>
+                </div>
+            </div>
+            <!-- Student Data Form -->
+            <div id="studentForm" style="display: none;">
+                <div class="success-message" id="successMessage">
+                    Selamat Login Telah Berhasil ! 
+                </div>
+               
+            </div>
+            <!-- Guru Dashboard -->
+            <div id="guruDashboard" style="display: none;">
+                <div class="guru-info">
+                    <h3>Selamat datang, Guru!</h3>
+                    <p>Kelas yang dipilih: <strong id="guruKelasDisplay">-</strong></p>
+                </div>
+                <div class="data-display">
+                    <h3>Daftar Siswa di Kelas Ini</h3>
+                    <div id="studentList" class="student-list"></div>
+                    <p id="noStudents" style="text-align: center; color: #6b7280; display: none;">Belum ada siswa terdaftar di kelas ini.</p>
+                </div>
+    </div>
+    <script>
+        let students = JSON.parse(localStorage.getItem('students')) || {};
+        let currentNIS = null;
+        let currentGuruNIK = null;
+        let currentGuruKelas = null;
+        // NIK -> kelas yang diajar (semua subkelas)
+        const guruData = {
+            '123456': ['10 DKV 1', '10 DKV 2', '10 DKV 3'],
+            '789012': ['10 BR 1', '10 BR 2', '10 BR 3'],
+            '345678': ['10 LP 1', '10 LP 2', '10 LP 3'],
+            '901234': ['10 AKL 1', '10 AKL 2', '10 AKL 3'],
+            '567890': ['10 MPLB 1', '10 MPLB 2', '10 MPLB 3'],
+            '112233': ['10 ULW 1', '10 ULW 2', '10 ULW 3']
+        };
+        function showError(inputId, errorId, message) {
+            document.getElementById(inputId).classList.add('error');
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        function clearError(inputId, errorId) {
+            document.getElementById(inputId).classList.remove('error');
+            document.getElementById(errorId).style.display = 'none';
+        }
+        function validateNumber(input) {
+            return /^\d+$/.test(input);
+        }
+        function selectRole(role) {
+            const siswaBtn = document.querySelector('.role-btn[onclick="selectRole(\'siswa\')"]');
+            const guruBtn = document.querySelector('.role-btn[onclick="selectRole(\'guru\')"]');
+            if (role === 'siswa') {
+                siswaBtn.classList.add('active');
+                guruBtn.classList.remove('active');
+                document.getElementById('siswaLoginForm').style.display = 'block';
+                document.getElementById('guruLoginForm').style.display = 'none';
+                hideAllForms();
+            } else {
+                siswaBtn.classList.remove('active');
+                guruBtn.classList.add('active');
+                document.getElementById('siswaLoginForm').style.display = 'none';
+                document.getElementById('guruLoginForm').style.display = 'block';
+                hideAllForms();
+            }
+        }
+        function hideAllForms() {
+            document.getElementById('studentForm').style.display = 'none';
+            document.getElementById('dataDisplay').style.display = 'none';
+            document.getElementById('guruDashboard').style.display = 'none';
+        }
+        function handleSiswaLogin() {
+            const nis = document.getElementById('nisLogin').value.trim();
+            const nisn = document.getElementById('nisnLogin').value.trim();
+            let isValid = true;
+            clearError('nisLogin', 'nisLoginError');
+            clearError('nisnLogin', 'nisnLoginError');
+            if (!nis || !validateNumber(nis) || nis.length !== 9) {
+                showError('nisLogin', 'nisLoginError', 'NIS harus diisi dan berupa tepat 9 angka');
+                isValid = false;
+            }
+            if (!nisn || !validateNumber(nisn) || nisn.length !== 10) {
+                showError('nisnLogin', 'nisnLoginError', 'NISN harus diisi dan berupa tepat 10 angka');
+                isValid = false;
+            }
+            if (isValid) {
+                if (!students[nis]) {
+                    students[nis] = { nisn: nisn, nama: null, kelas: null };
+                    localStorage.setItem('students', JSON.stringify(students));
+                }
+                if (students[nis] && students[nis].nisn === nisn) {
+                    currentNIS = nis;
+                    document.getElementById('siswaLoginForm').style.display = 'none';
+                    if (students[nis].nama && students[nis].kelas) {
+                        displayStudentData();
+                        document.getElementById('dataDisplay').style.display = 'block';
+                    } else {
+                        document.getElementById('studentForm').style.display = 'block';
+                        document.getElementById('successMessage').style.display = 'block';
+                    }
+                } else {
+                    showError('nisnLogin', 'nisnLoginError', 'NISN tidak cocok dengan NIS');
+                }
+            }
+        }
+        function handleSiswaLogout() {
+            currentNIS = null;
+            document.getElementById('studentForm').style.display = 'none';
+            document.getElementById('dataDisplay').style.display = 'none';
+            document.getElementById('siswaLoginForm').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        function handleEdit() {
+            document.getElementById('dataDisplay').style.display = 'none';
+            document.getElementById('studentForm').style.display = 'block';
+        }
+        function handleSubmit() {
+            const nama = document.getElementById('nama').value.trim();
+            const kelas = document.getElementById('kelas').value.trim();
+            let isValid = true;
+            clearError('nama', 'namaError');
+            clearError('kelas', 'kelasError');
+            if (!nama) {
+                showError('nama', 'namaError', 'Nama harus diisi');
+                isValid = false;
+            }
+            if (!kelas) {
+                showError('kelas', 'kelasError', 'Kelas harus dipilih');
+                isValid = false;
+            }
+            if (isValid && currentNIS) {
+                students[currentNIS].nama = nama;
+                students[currentNIS].kelas = kelas;
+                localStorage.setItem('students', JSON.stringify(students));
+                displayStudentData();
+                document.getElementById('studentForm').style.display = 'none';
+                document.getElementById('dataDisplay').style.display = 'block';
+            }
+        }
+        function displayStudentData() {
+            if (currentNIS && students[currentNIS]) {
+                document.getElementById('displayNama').textContent = students[currentNIS].nama || '-';
+                document.getElementById('displayKelas').textContent = students[currentNIS].kelas || '-';
+                document.getElementById('displayNIS').textContent = currentNIS;
+                document.getElementById('displayNISN').textContent = students[currentNIS].nisn || '-';
+            }
+        }
+        function handleGuruLogin() {
+            const nik = ""; // Add logic to get NIK value, e.g., from an input field
+            // Add your login logic here
+        }
+    </script>
+</body>
+</html>
