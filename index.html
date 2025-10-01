@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Si Cesi</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type ="image/png" href="./Final_Logo_Sicesi[1].png">
+    <link rel="icon" type ="image/png" href="./images/Final_Logo_Sicesi.png">
 </head>
-    <link rel="icon" type ="image/png" href="./Final_Logo_Sicesi[1].png">
 <head>
 <body>
-    <div class="container">
+    <div class="container" id="login">
         <div class="header">
-              <h2>Foto Profil</h2>
-      <img id="icon" src="kdw.png" alt="kdw PNG" />
-      <img id="logo" src="Final_Logo_Sicesi[1].png" alt="Final Logo Si cesi PNG" />
+            <img id="icon" src="./images/kdw.png" alt="kdw PNG" />
+            <img id="logo" src="./images/Final_Logo_Sicesi.png" alt="Final Logo Si cesi PNG" />
         </div>
         <div class="form-container">
             <!-- Role Selector -->
@@ -91,136 +89,87 @@
                     <div id="studentList" class="student-list"></div>
                     <p id="noStudents" style="text-align: center; color: #6b7280; display: none;">Belum ada siswa terdaftar di kelas ini.</p>
                 </div>
+            </div>
+        </div>
     </div>
-    <script>
-        let students = JSON.parse(localStorage.getItem('students')) || {};
-        let currentNIS = null;
-        let currentGuruNIK = null;
-        let currentGuruKelas = null;
-        // NIK -> kelas yang diajar (semua subkelas)
-        const guruData = {
-            '123456': ['10 DKV 1', '10 DKV 2', '10 DKV 3'],
-            '789012': ['10 BR 1', '10 BR 2', '10 BR 3'],
-            '345678': ['10 LP 1', '10 LP 2', '10 LP 3'],
-            '901234': ['10 AKL 1', '10 AKL 2', '10 AKL 3'],
-            '567890': ['10 MPLB 1', '10 MPLB 2', '10 MPLB 3'],
-            '112233': ['10 ULW 1', '10 ULW 2', '10 ULW 3']
-        };
-        function showError(inputId, errorId, message) {
-            document.getElementById(inputId).classList.add('error');
-            const errorElement = document.getElementById(errorId);
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-        function clearError(inputId, errorId) {
-            document.getElementById(inputId).classList.remove('error');
-            document.getElementById(errorId).style.display = 'none';
-        }
-        function validateNumber(input) {
-            return /^\d+$/.test(input);
-        }
-        function selectRole(role) {
-            const siswaBtn = document.querySelector('.role-btn[onclick="selectRole(\'siswa\')"]');
-            const guruBtn = document.querySelector('.role-btn[onclick="selectRole(\'guru\')"]');
-            if (role === 'siswa') {
-                siswaBtn.classList.add('active');
-                guruBtn.classList.remove('active');
-                document.getElementById('siswaLoginForm').style.display = 'block';
-                document.getElementById('guruLoginForm').style.display = 'none';
-                hideAllForms();
-            } else {
-                siswaBtn.classList.remove('active');
-                guruBtn.classList.add('active');
-                document.getElementById('siswaLoginForm').style.display = 'none';
-                document.getElementById('guruLoginForm').style.display = 'block';
-                hideAllForms();
-            }
-        }
-        function hideAllForms() {
-            document.getElementById('studentForm').style.display = 'none';
-            document.getElementById('dataDisplay').style.display = 'none';
-            document.getElementById('guruDashboard').style.display = 'none';
-        }
-        function handleSiswaLogin() {
-            const nis = document.getElementById('nisLogin').value.trim();
-            const nisn = document.getElementById('nisnLogin').value.trim();
-            let isValid = true;
-            clearError('nisLogin', 'nisLoginError');
-            clearError('nisnLogin', 'nisnLoginError');
-            if (!nis || !validateNumber(nis) || nis.length !== 9) {
-                showError('nisLogin', 'nisLoginError', 'NIS harus diisi dan berupa tepat 9 angka');
-                isValid = false;
-            }
-            if (!nisn || !validateNumber(nisn) || nisn.length !== 10) {
-                showError('nisnLogin', 'nisnLoginError', 'NISN harus diisi dan berupa tepat 10 angka');
-                isValid = false;
-            }
-            if (isValid) {
-                if (!students[nis]) {
-                    students[nis] = { nisn: nisn, nama: null, kelas: null };
-                    localStorage.setItem('students', JSON.stringify(students));
-                }
-                if (students[nis] && students[nis].nisn === nisn) {
-                    currentNIS = nis;
-                    document.getElementById('siswaLoginForm').style.display = 'none';
-                    if (students[nis].nama && students[nis].kelas) {
-                        displayStudentData();
-                        document.getElementById('dataDisplay').style.display = 'block';
-                    } else {
-                        document.getElementById('studentForm').style.display = 'block';
-                        document.getElementById('successMessage').style.display = 'block';
-                    }
-                } else {
-                    showError('nisnLogin', 'nisnLoginError', 'NISN tidak cocok dengan NIS');
-                }
-            }
-        }
-        function handleSiswaLogout() {
-            currentNIS = null;
-            document.getElementById('studentForm').style.display = 'none';
-            document.getElementById('dataDisplay').style.display = 'none';
-            document.getElementById('siswaLoginForm').style.display = 'block';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-        function handleEdit() {
-            document.getElementById('dataDisplay').style.display = 'none';
-            document.getElementById('studentForm').style.display = 'block';
-        }
-        function handleSubmit() {
-            const nama = document.getElementById('nama').value.trim();
-            const kelas = document.getElementById('kelas').value.trim();
-            let isValid = true;
-            clearError('nama', 'namaError');
-            clearError('kelas', 'kelasError');
-            if (!nama) {
-                showError('nama', 'namaError', 'Nama harus diisi');
-                isValid = false;
-            }
-            if (!kelas) {
-                showError('kelas', 'kelasError', 'Kelas harus dipilih');
-                isValid = false;
-            }
-            if (isValid && currentNIS) {
-                students[currentNIS].nama = nama;
-                students[currentNIS].kelas = kelas;
-                localStorage.setItem('students', JSON.stringify(students));
-                displayStudentData();
-                document.getElementById('studentForm').style.display = 'none';
-                document.getElementById('dataDisplay').style.display = 'block';
-            }
-        }
-        function displayStudentData() {
-            if (currentNIS && students[currentNIS]) {
-                document.getElementById('displayNama').textContent = students[currentNIS].nama || '-';
-                document.getElementById('displayKelas').textContent = students[currentNIS].kelas || '-';
-                document.getElementById('displayNIS').textContent = currentNIS;
-                document.getElementById('displayNISN').textContent = students[currentNIS].nisn || '-';
-            }
-        }
-        function handleGuruLogin() {
-            const nik = ""; // Add logic to get NIK value, e.g., from an input field
-            // Add your login logic here
-        }
-    </script>
+
+    <!-- BERANDA -->
+    <div id="phone" role="application">
+    <header>
+      <div class="left">
+        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+          <div class="lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="brand">Absensi</div>
+      </div>
+      <div class="logos">
+        <img class="logo" src="./images/Final_Logo_Sicesi.png" title="Logo Sekolah"></img>
+        <img class="logo" src="./images/kdw.png" title="Logo App"></img>
+      </div>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="absen-title">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div>
+            <div id="absen-title" style="font-weight:800;font-size:16px">Box Absen</div>
+            <div class="small-gray">Absen datang sebelum <strong>06:30</strong>. Absen pulang setelah <strong>15:00</strong>.</div>
+          </div>
+          <div class="small-gray">Waktu: <span id="now-time">--:--:--</span></div>
+        </div>
+
+        <div class="absen-row">
+          <div class="absen-box" id="datang-box">
+            <div class="absen-title">
+              <div>
+                <div style="font-weight:700; width: 50%;">Absen Datang</div>
+                <div class="status-pill"><div class="dot" id="dot-datang"></div><div id="label-datang">Belum</div></div>
+                <div class="absen-meta">Status kehadiran pagi</div>
+              </div>
+            </div>
+            <div class="absen-meta">Waktu tercatat: <span id="time-datang">-</span></div>
+          </div>
+
+          <div class="absen-box" id="pulang-box">
+            <div class="absen-title">
+              <div>
+                <div style="font-weight:700; width: 50%;">Absen Pulang</div>
+                <div class="status-pill"><div class="dot" id="dot-pulang"></div><div id="label-pulang">Belum</div></div>
+                <div class="absen-meta">Status pulang</div>
+              </div>
+            </div>
+            <div class="absen-meta">Waktu tercatat: <span id="time-pulang">-</span></div>
+          </div>
+        </div>
+
+        <button class="big-btn" id="absen-btn">Absen Sekarang</button>
+        <div class="info-msg" id="info-msg">Tekan tombol untuk melakukan absen. Pastikan lokasi aktif.</div>
+      </section>
+
+      <section class="map-box card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:700">Lokasi (real-time)</div>
+          <button id="loc-toggle" style="background:transparent;border:0;color:var(--a);font-weight:700;cursor:pointer">Aktifkan</button>
+        </div>
+        <div class="coords">
+          <div>Lat: <span id="lat">-</span></div>
+          <div>Lon: <span id="lon">-</span></div>
+        </div>
+        <iframe class="map" id="map-frame" src="about:blank" title="peta lokasi"></iframe>
+      </section>
+    </main>
+
+    <footer>
+      <div class="menu beranda onpage" onclick="beranda()">Beranda</div>
+      <div class="menu izin" onclick="izin()">Izin</div>
+      <div class="menu statistik" onclick="statistik()">Statistik</div>
+    </footer>
+  </div>
+
+    <script src="./script.js"></script>
 </body>
 </html>
