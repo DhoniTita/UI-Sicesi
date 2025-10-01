@@ -301,5 +301,4 @@
     .menu{color: white; flex:1;padding:10px;border-radius:12px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.09));cursor:pointer}
     .menu.onpage{background:linear-gradient(90deg,var(--a),var(--b));color:var(--white);font-weight:700}
 
-
     @media (max-width:420px){.phone{width:340px}}
