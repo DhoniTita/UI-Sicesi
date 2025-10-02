@@ -10,12 +10,15 @@
             padding: 20px;
         }
         .container {
+            height: 100vh;
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             overflow: hidden;
+            padding: 20px;
+            position: relative;
         }
         .header {
             background: linear-gradient(135deg, #ffa400 0%, #972d07 100%);
@@ -175,7 +178,7 @@
             .role-selector { flex-direction: column; }
         }
 
-        /* DHOONI */
+    /* BERANDA     */
             :root{
       --a:#FFA400; /* accent */
       --b:#972D07; /* deep red */
@@ -193,14 +196,14 @@
     .left{display:flex;align-items:center;gap:10px}
     .hamburger{width:44px;height:44px;border-radius:12px;background:var(--glass);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .25s}
     .hamburger .lines{width:22px;height:14px;position:relative}
-    .lines span{position:absolute;height:2px;width:100%;background:var(--white);left:0;border-radius:2px;transition:all .28s}
+    .lines span{position:absolute;height:2px;width:100%;background:var(--c);left:0;border-radius:2px;transition:all .28s}
     .lines span:nth-child(1){top:0}
     .lines span:nth-child(2){top:6px}
     .lines span:nth-child(3){top:12px}
     .hamburger.open .lines span:nth-child(1){transform: translateY(6px) rotate(45deg)}
     .hamburger.open .lines span:nth-child(2){opacity:0;transform:scaleX(.2)}
     .hamburger.open .lines span:nth-child(3){transform: translateY(-6px) rotate(-45deg)}
-    .brand{font-weight:700;color:var(--white)}
+    .brand{font-weight:700;color:var(--c)}
 
     .logos{display:flex;gap:8px;align-items:center}
     .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--white);box-shadow:0 4px 12px rgba(0,0,0,0.4)}
@@ -297,8 +300,127 @@
     iframe.map{width:100%;height:200px;border:0;border-radius:10px}
 
     /* footer */
-    footer{display:flex;justify-content:space-between;gap:6px;padding:8px}
-    .menu{color: white; flex:1;padding:10px;border-radius:12px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.09));cursor:pointer}
+    footer{width: 100%;display:flex;justify-content:space-between;gap:6px;padding:8px;position: absolute; bottom: 20px; left: 0;}
+    .menu{color: white; flex:1;padding:10px;border-radius:12px;text-align:center;background:var(--c);cursor:pointer;}
     .menu.onpage{background:linear-gradient(90deg,var(--a),var(--b));color:var(--white);font-weight:700}
 
-    @media (max-width:420px){.phone{width:340px}}
+    @media (max-width:420px){.Beranda{width:340px}}
+
+
+    /* AJUKAN IZIN */
+    #izinsection {
+    width: 100%;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .box-title {
+      background-color: #582707;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      padding-left: 20px;
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: white;
+      background:linear-gradient(90deg,var(--a),var(--b));
+      border-radius: 5px;
+    }
+
+    select, input[type="date"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #FFA400;
+      background: #FFA400;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    button {
+      background-color: #582707;
+      color: #FFFFFF;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #000000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #FFFFFF;
+    }
+
+    table th, table td {
+      border: 1px solid #582707;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #972D07;
+      color: #FFFFFF;
+    }
+
+    .keterangan {
+      display: none;
+      margin-top: 20px;
+      background: #FFFFFF;
+      padding: 20px;
+      border: 2px solid #582707;
+      border-radius: 8px;
+    }
+
+    .keterangan h3 {
+      margin-top: 0;
+      color: #972D07;
+    }
+
+    .detail-item {
+      margin: 8px 0;
+    }
+
+    .detail-label {
+      font-weight: bold;
+      color: #582707;
+    }
+
+    .warning {
+      display: none;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #FF6B00;
+      color: #FFFFFF;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .empty-warning {
+      margin-top: 15px;
+      text-align: center;
+      color: #972D07;
+      font-weight: bold;
+    }

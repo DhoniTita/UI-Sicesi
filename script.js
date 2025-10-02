@@ -1,3 +1,5 @@
+// LOGIN
+
 let students = JSON.parse(localStorage.getItem('students')) || {};
         let currentNIS = null;
         let currentGuruNIK = null;
@@ -68,14 +70,14 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
                 }
                 if (students[nis] && students[nis].nisn === nisn) {
                     currentNIS = nis;
-                    // (LANJUT KE DHONI)
+                    // (PENGHUBUNG KE BERANDA)
                     document.getElementById('siswaLoginForm').style.display = 'none';
                     if (students[nis].nama && students[nis].kelas) {
                         displayStudentData();
-                        document.getElementById('phone').style.display = 'block';
+                        document.getElementById('beranda').style.display = 'block';
                     } 
                     else {
-                        document.getElementById('phone').style.display = 'block';
+                        document.getElementById('beranda').style.display = 'block';
                         document.getElementById('login').style.display = 'none';
                     }
                 } else {
@@ -130,7 +132,7 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
             // Add your login logic here
         }
 
-        // DHONI
+    // BERANDA   
     const hamburger = document.getElementById('hamburger');
     hamburger.addEventListener('click',()=>{
       hamburger.classList.toggle('open');
@@ -199,32 +201,26 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
       }
     }
 
-    absenBtn.addEventListener('click',async()=>{
-      const d = now();
-      const a = allowedToAbsen(d);
-      if(!a.allowed){
-        alert(a.reason);
-        return;
-      }
-      if(a.type==='datang'){
-        if(localStorage.getItem(KEY_DATANG)){
-          alert('Anda sudah absen datang.');
-          return;
-        }
-        localStorage.setItem(KEY_DATANG, formatTimeShort(d));
-        loadStatus();
-        alert('Absen datang berhasil: '+formatTimeShort(d));
-      } else if(a.type==='pulang'){
-        if(localStorage.getItem(KEY_PULANG)){
-          alert('Anda sudah absen pulang.');
-          return;
-        }
-        localStorage.setItem(KEY_PULANG, formatTimeShort(d));
-        loadStatus();
-        alert('Absen pulang berhasil: '+formatTimeShort(d));
-      }
-      updateNow();
-    });
+absenBtn.addEventListener('click',async()=>{
+  const d = now();
+  const a = allowedToAbsen(d);
+  if(!a.allowed){
+    alert(a.reason);
+    return;
+  }
+
+  if(a.type==='datang'){
+    localStorage.setItem(KEY_DATANG, formatTimeShort(d)); // selalu update
+    loadStatus();
+    alert('Absen datang berhasil: '+formatTimeShort(d));
+  } else if(a.type==='pulang'){
+    localStorage.setItem(KEY_PULANG, formatTimeShort(d)); // selalu update
+    loadStatus();
+    alert('Absen pulang berhasil: '+formatTimeShort(d));
+  }
+
+  updateNow();
+});
 
     // init
     loadStatus();
@@ -269,15 +265,102 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
       navigator.geolocation.getCurrentPosition((p)=>{setMap(p.coords.latitude,p.coords.longitude)},()=>{});
     }
 
+    // AJUKAN IZIN
+    const form = document.getElementById("izinForm");
+    const jenisInput = document.getElementById("jenis");
+    const tanggalInput = document.getElementById("tanggal");
+    const keteranganInput = document.getElementById("keterangan");
+    const tableBody = document.querySelector("#izinTable tbody");
+    const boxKeterangan = document.getElementById("boxKeterangan");
+    const detailTanggal = document.getElementById("detailTanggal");
+    const detailJenis = document.getElementById("detailJenis");
+    const detailKeterangan = document.getElementById("detailKeterangan");
+    const warningMsg = document.getElementById("warningMsg");
+    const formWarning = document.getElementById("formWarning");
+
+    function checkEmptyTable() {
+      if (tableBody.rows.length === 0) {
+        warningMsg.style.display = "block";
+        boxKeterangan.style.display = "none"; 
+      } else {
+        warningMsg.style.display = "none";
+      }
+    }
+
+    function saveData(data) {
+      localStorage.setItem("izinData", JSON.stringify(data));
+    }
+
+    function loadData() {
+      return JSON.parse(localStorage.getItem("izinData")) || [];
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      const data = loadData();
+
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.tanggal}</td>
+          <td>${item.jenis}</td>
+          <td><button type="button" class="lihatBtn">Lihat</button></td>
+        `;
+        row.querySelector(".lihatBtn").addEventListener("click", function() {
+          detailTanggal.textContent = item.tanggal;
+          detailJenis.textContent = item.jenis;
+          detailKeterangan.textContent = item.keterangan;
+          boxKeterangan.style.display = "block";
+        });
+        tableBody.appendChild(row);
+      });
+      checkEmptyTable();
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      formWarning.style.display = "none";
+
+      const jenis = jenisInput.value;
+      const tanggal = tanggalInput.value;
+      const keterangan = keteranganInput.value.trim();
+
+      // Validasi input
+      if (!jenis || !tanggal || !keterangan) {
+        formWarning.textContent = "Semua field harus diisi!";
+        formWarning.style.display = "block";
+        return;
+      }
+
+      const data = loadData();
+      data.push({ jenis, tanggal, keterangan });
+      saveData(data);
+
+      renderTable();
+      form.reset();
+    });
+
+    renderTable();
+
     function beranda(){
         document.querySelector('.onpage').classList.remove('onpage');
         document.querySelector('.beranda').classList.add('onpage');
+        document.getElementById('beranda').style.display = 'block';
+        document.getElementById('izin').style.display = 'none';
+        document.getElementById('statistik').style.display = 'none';
+
     }
     function izin(){
         document.querySelector('.onpage').classList.remove('onpage');
         document.querySelector('.izin').classList.add('onpage');
+        document.getElementById('beranda').style.display = 'none';
+        document.getElementById('izin').style.display = 'block';
+        document.getElementById('statistik').style.display = 'none';
     }
     function statistik(){
         document.querySelector('.onpage').classList.remove('onpage');
         document.querySelector('.statistik').classList.add('onpage');
+        document.getElementById('beranda').style.display = 'none';
+        document.getElementById('izin').style.display = 'none';
+        document.getElementById('statistik').style.display = 'block';
     }

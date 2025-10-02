@@ -9,7 +9,8 @@
 </head>
 <head>
 <body>
-    <div class="container" id="login">
+    <!-- LOGIN -->
+    <div class="container" id="login" style="padding: 0;">
         <div class="header">
             <img id="icon" src="./images/kdw.png" alt="kdw PNG" />
             <img id="logo" src="./images/Final_Logo_Sicesi.png" alt="Final Logo Si cesi PNG" />
@@ -23,12 +24,12 @@
             <!-- Siswa Login Form -->
             <div id="siswaLoginForm">
                 <div class="input-group">
-                    <label for="nisLogin">Nomor NIS</label>
+                    <label for="nisLogin" style="background: transparent; color: black;">Nomor NIS</label>
                     <input type="text" id="nisLogin" placeholder="Masukkan NIS" maxlength="9">
                     <div class="error-message" id="nisLoginError">NIS harus diisi dan berupa tepat 9 angka</div>
                 </div>
                 <div class="input-group">
-                    <label for="nisnLogin">Nomor NISN</label>
+                    <label for="nisnLogin" style="background: transparent; color: black;">Nomor NISN</label>
                     <input type="text" id="nisnLogin" placeholder="Masukkan NISN" maxlength="10">
                     <div class="error-message" id="nisnLoginError">NISN harus diisi dan berupa tepat 10 angka</div>
                 </div>
@@ -94,7 +95,7 @@
     </div>
 
     <!-- BERANDA -->
-    <div id="phone" role="application">
+    <div id="beranda" role="application" style="display: none; position: relative;">
     <header>
       <div class="left">
         <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
@@ -170,6 +171,102 @@
     </footer>
   </div>
 
+  <!-- AJUKAN IZIN -->
+
+  <div id="izin" class="container" style="display: none;">
+    <header>
+      <div class="left">
+        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+          <div class="lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="brand">Absensi</div>
+      </div>
+      <div class="logos">
+        <img class="logo" src="./images/Final_Logo_Sicesi.png" title="Logo Sekolah"></img>
+        <img class="logo" src="./images/kdw.png" title="Logo App"></img>
+      </div>
+    </header>
+      <div class="box-title">Pengajuan Izin</div>
+
+    <!-- Peringatan input kosong -->
+    <div class="warning" id="formWarning"></div>
+
+    <form id="izinForm">
+      <label>Pilih Jenis Izin:</label>
+      <select id="jenis">
+        <option value="" disabled selected>-- Pilih Jenis --</option>
+        <option value="Izin">Izin</option>
+        <option value="Sakit">Sakit</option>
+      </select>
+
+      <label>Tanggal:</label>
+      <input type="date" id="tanggal">
+
+      <label>Keterangan:</label>
+      <textarea id="keterangan" placeholder="Masukkan keterangan anda..."></textarea>
+
+      <button type="submit">Ajukan Izin</button>
+    </form>
+
+    <footer>
+      <div class="menu beranda" onclick="beranda()">Beranda</div>
+      <div class="menu izin onpage" onclick="izin()">Izin</div>
+      <div class="menu statistik" onclick="statistik()">Statistik</div>
+    </footer>
+  </div>
+
+
+  <!-- STATISTIK -->
+  <div id="statistik" class="container" style="display: none;">
+    <header>
+      <div class="left">
+        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+          <div class="lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="brand">Absensi</div>
+      </div>
+      <div class="logos">
+        <img class="logo" src="./images/Final_Logo_Sicesi.png" title="Logo Sekolah"></img>
+        <img class="logo" src="./images/kdw.png" title="Logo App"></img>
+      </div>
+    </header>
+
+    <div class="box-title">Pengajuan Izin</div>
+
+    <table id="izinTable">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Jenis</th>
+          <th>Lihat</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <p class="empty-warning" id="warningMsg">Belum ada data pengajuan izin.</p>
+
+    <div class="keterangan" id="boxKeterangan">
+      <h3>Detail Pengajuan</h3>
+      <p class="detail-item"><span class="detail-label">Tanggal:</span> <span id="detailTanggal"></span></p>
+      <p class="detail-item"><span class="detail-label">Jenis:</span> <span id="detailJenis"></span></p>
+      <p class="detail-item"><span class="detail-label">Keterangan:</span> <span id="detailKeterangan"></span></p>
+    </div>
+
+    <footer>
+      <div class="menu beranda" onclick="beranda()">Beranda</div>
+      <div class="menu izin" onclick="izin()">Izin</div>
+      <div class="menu statistik onpage" onclick="statistik()">Statistik</div>
+    </footer>
+  </div>
     <script src="./script.js"></script>
 </body>
-</html>
+</html> 
