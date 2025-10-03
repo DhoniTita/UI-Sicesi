@@ -5,10 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Si Cesi</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">   
     <link rel="icon" type ="image/png" href="./images/Final_Logo_Sicesi.png">
 </head>
 <head>
 <body>
+  <div id="side-menu">
+    <!-- back hanya ke halaman utama kalau ada, kalau tidak bisa dihapus -->
+      <button onclick="Showmenu()" class="back"><i class="fa-solid fa-arrow-left"></i></button>
+
+      <h2>Pengaturan</h2>
+
+      <a href="profil_saya.html" class="button">
+        <i class="fa-solid fa-user"></i>
+        <span>Profil Saya</span>
+      </a>
+
+      <a href="notifikasi.html" class="button">
+        <div class="notif-toggle">
+          <span id="notifStatus"><i class="fa-solid fa-bell"></i>Notifikasi ON</span>
+          <label class="switch">
+            <input type="checkbox" id="notifToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </a>
+    </div>
+
     <!-- LOGIN -->
     <div class="container" id="login" style="padding: 0;">
         <div class="header">
@@ -98,13 +121,13 @@
     <div id="beranda" role="application" style="display: none; position: relative;">
     <header>
       <div class="left">
-        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+        <button onclick="Showmenu()" class="hamburger" id="hamburger" aria-label="menu" title="Menu">
           <div class="lines">
             <span></span>
             <span></span>
             <span></span>
           </div>
-        </div>
+        </button>
         <div class="brand">Absensi</div>
       </div>
       <div class="logos">
@@ -176,13 +199,13 @@
   <div id="izin" class="container" style="display: none;">
     <header>
       <div class="left">
-        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+        <button onclick="Showmenu()" class="hamburger" id="hamburger" aria-label="menu" title="Menu">
           <div class="lines">
             <span></span>
             <span></span>
             <span></span>
           </div>
-        </div>
+        </button>
         <div class="brand">Absensi</div>
       </div>
       <div class="logos">
@@ -224,13 +247,13 @@
   <div id="statistik" class="container" style="display: none;">
     <header>
       <div class="left">
-        <div class="hamburger" id="hamburger" aria-label="menu" title="Menu">
+        <button onclick="Showmenu()" class="hamburger" id="hamburger" aria-label="menu" title="Menu">
           <div class="lines">
             <span></span>
             <span></span>
             <span></span>
           </div>
-        </div>
+        </button>
         <div class="brand">Absensi</div>
       </div>
       <div class="logos">
@@ -267,6 +290,8 @@
       <div class="menu statistik onpage" onclick="statistik()">Statistik</div>
     </footer>
   </div>
+
+  
     <script src="./script.js"></script>
 </body>
 </html> 

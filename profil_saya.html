@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profil</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* === Global Style === */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #FFA400, #972D07); /* Gradasi background */
+  color: white;
+  
+}
+    
+    .container {
+  padding: 20px;
+  text-align: center;
+  position: relative; /* supaya .back posisinya relatif */
+}
+
+.container a {
+ text-decoration: none;
+}
+
+
+/* === Tombol Back === */
+.button a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+}
+
+.back {
+  position: absolute;
+  top: 20px;            /* jarak dari atas */
+  left: 20px;    
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px auto 10px auto; /* ⬅️ kasih jarak atas lebih besar */
+  font-size: 40px;
+  color: #666;
+}
+
+.ubah-foto {
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto; /* supaya form ada di tengah */
+}
+
+form label {
+  display: block;
+  margin: 10px auto 5px auto; 
+  width: 90%;                 
+  text-align: left;           
+  font-weight: bold;
+}
+
+form input {
+  display: block;
+  width: 90%;
+  padding: 12px;
+  margin: 0 auto 15px auto;  /* auto kiri-kanan bikin input di tengah */
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+
+input:focus {
+  border: 2px solid #FFB700;
+}
+
+/* === Tombol Simpan === */
+.btn {
+  margin-top: 170px;
+  padding: 12px;
+  width: 80%;
+
+  background-color: #ffffff;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  box-shadow: 0px 3px 8px rgb(255, 255, 255);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  background-color: #FFA400;
+}
+
+/* === Responsive untuk layar kecil (HP) === */
+@media (max-width: 480px) {
+  .profile-pic {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .ubah-foto {
+    font-size: 13px;
+  }
+
+  form {
+    margin-top: 30px;
+    gap: 14px;
+    padding: 0 12px;
+  }
+
+  input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+
+/* Mobile view */
+@media (max-width: 600px) {
+  form {
+    width: 95%;
+  }
+  form input {
+    width: 90%;  /* biar pas */
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- tombol back kembali ke pengaturan -->
+    <a href="index.html" class="back">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+
+    <div class="profile-pic">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    
+    <div class="ubah-foto">Ubah Foto</div>
+
+    <form>
+      <label for="nama">Nama Lengkap</label>
+      <input type="text" id="nama" placeholder="Masukkan nama lengkap">
+
+      <label for="nis">NIS</label>
+      <input type="text" id="nis" placeholder="Masukkan NIS">
+
+      <label for="kelas">Kelas / Jurusan</label>
+      <input type="text" id="kelas" placeholder="Masukkan kelas/jurusan">
+
+      <button type="submit" class="btn">Simpan</button>
+    </form>
+  </div>
+</body>
+</html>

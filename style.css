@@ -361,11 +361,6 @@
       cursor: pointer;
       font-weight: bold;
     }
-
-    button:hover {
-      background-color: #000000;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -424,3 +419,144 @@
       color: #972D07;
       font-weight: bold;
     }
+
+    #side-menu{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background: linear-gradient(135deg, #ffa400 0%, #972d07 100%);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    #side-menu.open{
+      transform: translateX(0);
+    }
+
+    .container {
+    padding: 20px;
+   
+  }
+
+  .container a {
+    text-decoration: none;
+   }
+
+  .container .button {
+   
+    margin-top: 130px;
+  }
+  
+  .back {
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    margin: 0 10px 40px 15px;
+    font-weight: bold;
+  }
+  
+  .button {
+    position: relative; /* supaya icon bisa diatur absolut */
+    display: flex;
+    justify-content: center; /* teks di tengah */
+    align-items: center;
+    background-color: #FFFF; /* Warna tombol kuning */
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #582707;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgb(255, 255, 255);
+    transition: transform 0.2s ease;
+    margin: 0;
+  }
+
+  .button a {
+    text-decoration: none;
+    color: #582707;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    background-color: #FFA400;
+    color: #FFFF;
+  }
+
+  
+  .button i {
+    position: absolute;
+    left: 20px; /* jarak icon dari kiri */
+    font-size: 22px;
+  }
+  
+  .button span {
+    text-align: center;
+  }
+  
+  .button + .button {
+    margin-top: 60px;
+  }
+  
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  background: transparent;
+}
+
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  transition: .3s;
+  border-radius: 34px;
+}
+.notif-toggle{
+  display: flex;
+  flex-wrap: wrap;
+}
+#notifStatus{
+  width: 100%;
+  height: fit-content;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}

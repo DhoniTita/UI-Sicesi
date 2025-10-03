@@ -1,3 +1,58 @@
+function Showmenu(){
+    document.getElementById("side-menu").classList.toggle('open');
+    hamburger.classList.toggle('open');
+  }
+
+  const notifToggle = document.getElementById('notifToggle');
+const notifStatus = document.getElementById('notifStatus');
+
+const KEY_NOTIF = 'notif_enabled';
+
+// cek status notifikasi
+function notifEnabled(){
+  return notifToggle.checked;
+}
+
+// update status teks + simpan ke localStorage
+function updateNotifStatus(){
+  const enabled = notifToggle.checked;
+  notifStatus.textContent = enabled ? "Notifikasi ON" : "Notifikasi OFF";
+  localStorage.setItem(KEY_NOTIF, enabled ? "1" : "0");
+}
+
+// event listener saat toggle berubah
+notifToggle.addEventListener('change', updateNotifStatus);
+
+// inisialisasi saat load halaman
+(function initNotif(){
+  const saved = localStorage.getItem(KEY_NOTIF);
+  if(saved === "0"){
+    notifToggle.checked = false;
+  } else {
+    notifToggle.checked = true; // default ON
+  }
+  updateNotifStatus();
+})();
+
+// modifikasi checkReminder
+function checkReminder(curr){
+  if(!notifEnabled()) return; // kalau OFF, skip
+
+  const d = localStorage.getItem(KEY_DATANG);
+  const p = localStorage.getItem(KEY_PULANG);
+
+  const h = curr.getHours(), m = curr.getMinutes();
+
+  // lewat jam datang tapi belum absen datang
+  if(!d && (h > datangCutoff.hour || (h === datangCutoff.hour && m > datangCutoff.minute))){
+    infoMsg.textContent = `⚠️ Anda belum absen datang (batas ${pad(datangCutoff.hour)}:${pad(datangCutoff.minute)} sudah terlewati).`;
+  }
+
+  // lewat jam pulang tapi belum absen pulang
+  if(!p && (h > pulangCutoff.hour || (h === pulangCutoff.hour && m > pulangCutoff.minute))){
+    infoMsg.textContent = `⚠️ Anda belum absen pulang (mulai ${pad(pulangCutoff.hour)}:${pad(pulangCutoff.minute)}).`;
+  }
+}
 // LOGIN
 
 let students = JSON.parse(localStorage.getItem('students')) || {};
@@ -133,10 +188,6 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
         }
 
     // BERANDA   
-    const hamburger = document.getElementById('hamburger');
-    hamburger.addEventListener('click',()=>{
-      hamburger.classList.toggle('open');
-    });
 
     const nowEl = document.getElementById('now-time');
     const absenBtn = document.getElementById('absen-btn');
@@ -164,26 +215,45 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
     function formatTime(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
     function formatTimeShort(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}`}
 
-    function loadStatus(){
-      const d = localStorage.getItem(KEY_DATANG);
-      const p = localStorage.getItem(KEY_PULANG);
-      if(d){
-        dotDatang.classList.add('present');
-        labelDatang.textContent = 'Sudah';
-        timeDatang.textContent = d;
-      } else {dotDatang.classList.remove('present');labelDatang.textContent='Belum';timeDatang.textContent='-'}
-      if(p){dotPulang.classList.add('present');labelPulang.textContent='Sudah';timePulang.textContent=p}else{dotPulang.classList.remove('present');labelPulang.textContent='Belum';timePulang.textContent='-'}
-    }
+function loadStatus(){
+  const d = localStorage.getItem(KEY_DATANG);
+  const p = localStorage.getItem(KEY_PULANG);
+  const telat = localStorage.getItem('absen_datang_telat') === '1';
 
+  if(d){
+    dotDatang.classList.add('present');
+    labelDatang.textContent = telat ? 'Telat' : 'Sudah';
+    timeDatang.textContent = d;
+  } else {
+    dotDatang.classList.remove('present');
+    labelDatang.textContent = 'Belum';
+    timeDatang.textContent = '-';
+  }
+
+  if(p){
+    dotPulang.classList.add('present');
+    labelPulang.textContent = 'Sudah';
+    timePulang.textContent = p;
+  } else {
+    dotPulang.classList.remove('present');
+    labelPulang.textContent='Belum';
+    timePulang.textContent='-';
+  }
+}
     function allowedToAbsen(curr){
-      // returns {allowed:boolean, type: 'datang'|'pulang'|'none', reason}
-      const h = curr.getHours(), m = curr.getMinutes();
-      const isBeforeDatangCutoff = (h < datangCutoff.hour) || (h === datangCutoff.hour && m <= datangCutoff.minute);
-      const isAfterPulangCutoff = (h > pulangCutoff.hour) || (h === pulangCutoff.hour && m >= pulangCutoff.minute);
-      if(isBeforeDatangCutoff) return {allowed:true,type:'datang'};
-      if(isAfterPulangCutoff) return {allowed:true,type:'pulang'};
-      return {allowed:false,type:'none',reason:`Waktu absen belum sesuai. Datang hanya sampai ${pad(datangCutoff.hour)}:${pad(datangCutoff.minute)} dan pulang mulai ${pad(pulangCutoff.hour)}:${pad(pulangCutoff.minute)}.`}
-    }
+  const h = curr.getHours(), m = curr.getMinutes();
+  const isBeforeDatangCutoff = (h < datangCutoff.hour) || (h === datangCutoff.hour && m <= datangCutoff.minute);
+  const isAfterPulangCutoff = (h > pulangCutoff.hour) || (h === pulangCutoff.hour && m >= pulangCutoff.minute);
+
+  // Selalu izinkan datang sampai absen pulang dilakukan
+  if(!localStorage.getItem(KEY_DATANG)){
+    return {allowed:true, type:'datang', late: !isBeforeDatangCutoff};
+  }
+  if(isAfterPulangCutoff){
+    return {allowed:true, type:'pulang'};
+  }
+  return {allowed:false, type:'none', reason:`Belum waktunya absen pulang.`};
+}
 
     function updateNow(){
       const d = now();
@@ -201,7 +271,7 @@ let students = JSON.parse(localStorage.getItem('students')) || {};
       }
     }
 
-absenBtn.addEventListener('click',async()=>{
+absenBtn.addEventListener('click', async ()=>{
   const d = now();
   const a = allowedToAbsen(d);
   if(!a.allowed){
@@ -210,13 +280,24 @@ absenBtn.addEventListener('click',async()=>{
   }
 
   if(a.type==='datang'){
-    localStorage.setItem(KEY_DATANG, formatTimeShort(d)); // selalu update
+    const waktu = formatTimeShort(d);
+    localStorage.setItem(KEY_DATANG, waktu);
+
+    // Simpan flag telat
+    if(a.late){
+      localStorage.setItem('absen_datang_telat', '1');
+    } else {
+      localStorage.removeItem('absen_datang_telat');
+    }
+
     loadStatus();
-    alert('Absen datang berhasil: '+formatTimeShort(d));
-  } else if(a.type==='pulang'){
-    localStorage.setItem(KEY_PULANG, formatTimeShort(d)); // selalu update
+    alert(`Absen datang berhasil: ${waktu} ${a.late ? '(TELAT)' : ''}`);
+  } 
+  else if(a.type==='pulang'){
+    const waktu = formatTimeShort(d);
+    localStorage.setItem(KEY_PULANG, waktu);
     loadStatus();
-    alert('Absen pulang berhasil: '+formatTimeShort(d));
+    alert('Absen pulang berhasil: '+waktu);
   }
 
   updateNow();
@@ -364,3 +445,44 @@ absenBtn.addEventListener('click',async()=>{
         document.getElementById('izin').style.display = 'none';
         document.getElementById('statistik').style.display = 'block';
     }
+
+    function checkReminder(curr){
+  if(!notifEnabled()) return; // kalau OFF, skip
+
+  const d = localStorage.getItem(KEY_DATANG);
+  const p = localStorage.getItem(KEY_PULANG);
+
+  const h = curr.getHours(), m = curr.getMinutes();
+
+  // lewat jam datang tapi belum absen datang
+  if(!d && (h > datangCutoff.hour || (h === datangCutoff.hour && m > datangCutoff.minute))){
+    infoMsg.textContent = `⚠️ Anda belum absen datang (batas ${pad(datangCutoff.hour)}:${pad(datangCutoff.minute)} sudah terlewati).`;
+  }
+
+  // lewat jam pulang tapi belum absen pulang
+  if(!p && (h > pulangCutoff.hour || (h === pulangCutoff.hour && m > pulangCutoff.minute))){
+    infoMsg.textContent = `⚠️ Anda belum absen pulang (mulai ${pad(pulangCutoff.hour)}:${pad(pulangCutoff.minute)}).`;
+  }
+}
+
+function updateNow(){
+  const d = now();
+  nowEl.textContent = formatTime(d);
+
+  // update button availability
+  const a = allowedToAbsen(d);
+  if(a.allowed){
+    absenBtn.disabled = false;
+    absenBtn.textContent = 'Absen Sekarang';
+    infoMsg.textContent = (a.type==='datang')
+      ? `Bisa absen datang sampai ${pad(datangCutoff.hour)}:${pad(datangCutoff.minute)}.`
+      : `Bisa absen pulang mulai ${pad(pulangCutoff.hour)}:${pad(pulangCutoff.minute)}.`;
+  } else {
+    absenBtn.disabled = true;
+    absenBtn.textContent = 'Absen (tidak tersedia)';
+    infoMsg.textContent = a.reason;
+  }
+
+  // 🔔 cek notifikasi otomatis (override pesan jika perlu)
+  checkReminder(d);
+}
